@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project default="build">
+
+    <target name="build" depends="clean,prepare,phplint,jsonlint,phpunit" />
+
+    <target name="clean">
+        <delete dir="build" />
+    </target>
+
+    <target name="prepare">
+        <mkdir dir="build" />
+    </target>
+
+    <target name="phplint">
+        <exec
+            command="
+                find . -not -ipath '*vendor*' -type 'f' -name '*.php' -print0
+                | xargs -0 -n1 -P8 php -l
+                &gt; /dev/null
+            "
+            checkreturn="true"
+            passthru="true"
+        />
+    </target>
+
+    <target name="jsonlint">
+        <exec
+            command="
+                find -name '*.json' -not -ipath '*vendor*' -print0
+                | xargs -0 -n1 -i'{}' sh -c 'echo {} &amp;&amp; jsonlint {}'
+                &gt; /dev/null
+            "
+            checkreturn="true"
+            passthru="true"
+        />
+    </target>
+
+    <target name="phpunit">
+        <phpunit
+            haltonerror="true"
+            haltonfailure="true"
+            bootstrap="vendor/autoload.php"
+        >
+            <formatter type="xml" usefile="true" todir="build" outfile="phpunit-junit.xml" />
+            <batchtest>
+                <fileset dir="tests">
+                    <include name="**/*Test.php" />
+                </fileset>
+            </batchtest>
+        </phpunit>
+    </target>
+
+</project>

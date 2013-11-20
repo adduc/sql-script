@@ -1,0 +1,17 @@
+{
+    "name": "adduc/sql-script",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "John S Long",
+            "email": "a@88k.us"
+        }
+    ],
+    "minimum-stability": "stable",
+    "autoload": {
+        "classmap": ["src/"]
+    },
+    "require": {
+        "ext-mysqli": "*"
+    }
+}
