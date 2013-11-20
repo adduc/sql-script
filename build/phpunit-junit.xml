@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<testsuites>
-  <testsuite name="AllTests" tests="1" assertions="0" failures="0" errors="0" time="0.001251">
-    <testsuite name="Adduc\SqlScript\SqlTest" file="/home/jlong/Documents/my.repos/mysql-script/tests/SqlScriptTest.php" namespace="Adduc\SqlScript" fullPackage="Adduc.SqlScript" tests="1" assertions="0" failures="0" errors="0" time="0.001251">
-      <testcase name="testLocation" class="Adduc\SqlScript\SqlTest" file="/home/jlong/Documents/my.repos/mysql-script/tests/SqlScriptTest.php" line="8" assertions="0" time="0.001251"/>
-    </testsuite>
-  </testsuite>
-</testsuites>
