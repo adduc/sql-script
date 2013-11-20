@@ -10,6 +10,7 @@
 
     <target name="prepare">
         <mkdir dir="build" />
+        <exec command="composer install --dev" checkreturn="true" passthru="true" />
     </target>
 
     <target name="phplint">
