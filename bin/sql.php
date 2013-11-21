@@ -10,18 +10,13 @@ if (php_sapi_name() != 'cli') {
 
 include(__DIR__ . '/../vendor/autoload.php');
 
-// Walk up directory until we find composer file.
+// Find our configuration.
 $sql = new Sql();
-$result = $sql->findComposerFile(getcwd());
+$config = $sql->getConfiguration(getcwd());
 
-
-if (!$result) {
+if (!$config) {
     fwrite(STDERR, "Could not find a composer.json file with extra->adduc-sql set.\n");
     exit(1);
-} else {
-    /**
-     * @var string $dir
-     * @var array $json
-     */
-    explode($result);
 }
+
+var_dump($config);
