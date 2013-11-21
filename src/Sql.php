@@ -19,7 +19,7 @@ class Sql
      */
     public function getConfiguration($dir)
     {
-        $dir = realpath($dir);
+        $dir = realpath($dir) ?: $dir;
 
         while ($dir != dirname($dir)) {
             $file = "{$dir}/composer.json";

@@ -15,13 +15,19 @@ class SqlTest extends \PHPUnit_Framework_TestCase
 
     public function testGetConfiguration()
     {
-        $result = $this->sql->getConfiguration(__DIR__);
+        $root = vfsStream::setup('root', null, array(
+            'composer.json' => '{ "extra": { "adduc-sql": {} } }'
+        ));
+
+        $dir = vfsStream::url('root');
+        $result = $this->sql->getConfiguration($dir);
         $this->assertNotEmpty($result);
     }
 
     public function testGetConfiguration_expectedFailure()
     {
-        $dir = vfsStream::url('exampleDir');
+        $root = vfsStream::setup('root', null, array());
+        $dir = vfsStream::url('root');
         $result = $this->sql->getConfiguration($dir);
         $this->assertEmpty($result);
     }
