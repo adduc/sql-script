@@ -4,6 +4,8 @@
 
     <target name="build" depends="clean,prepare,phplint,jsonlint,phpunit" />
 
+    <target name="quick" depends="phplint,jsonlint,phpunit" />
+
     <target name="clean">
         <delete dir="build" />
     </target>
