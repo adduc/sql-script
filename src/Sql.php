@@ -14,7 +14,7 @@ class Sql
     public function findComposerFile($dir)
     {
         $dir = realpath($dir);
-        while ($dir != "/") {
+        while ($dir != dirname($dir)) {
             $file = "{$dir}/composer.json";
             switch (true) {
                 case !file_exists($file):
