@@ -3,14 +3,11 @@
 namespace Adduc\SqlScript;
 use org\bovigo\vfs\vfsStream;
 
-class SqlTest extends \PHPUnit_Framework_TestCase
+class ConfigurationTest extends \PHPUnit_Framework_TestCase
 {
-
-    protected $sql;
-
     public function setUp()
     {
-        $this->sql = new Sql();
+
     }
 
     public function testGetConfiguration()
@@ -20,16 +17,18 @@ class SqlTest extends \PHPUnit_Framework_TestCase
         ));
 
         $dir = vfsStream::url('root');
-        $result = $this->sql->getConfiguration($dir);
-        $this->assertNotEmpty($result);
+        $config = new Configuration($dir);
+        $this->assertNotEmpty($config->data['dir']);
     }
 
+    /**
+     * @expectedException \DomainException
+     */
     public function testGetConfiguration_expectedFailure()
     {
         $root = vfsStream::setup('root', null, array());
         $dir = vfsStream::url('root');
-        $result = $this->sql->getConfiguration($dir);
-        $this->assertEmpty($result);
+        $config = new Configuration($dir);
     }
 
 }
