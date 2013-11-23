@@ -19,6 +19,12 @@ class Sql
         $file = $loader->findConfigurationFile($dir ?: getcwd());
         $config = $loader->loadConfiguration($file);
         $output && fwrite($output, "Configuration loaded.\n");
+
+        $db = new \PDO(
+            $config->database['dsn'],
+            $config->database['username'],
+            $config->database['password']
+        );
     }
 
 }

@@ -24,8 +24,7 @@ class Configuration
      *
      */
     public $database = array(
-        "hostname" => "localhost",
-        "database" => "database",
+        "dsn" => "mysql:dbname=database;host=127.0.0.1",
         "username" => "username",
         "password" => "password"
     );

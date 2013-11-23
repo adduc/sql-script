@@ -53,7 +53,7 @@ class ConfigurationLoader
             throw new \DomainException("Could not load database file.");
         }
 
-        $config->database = $this->loaded_files[$database_file];
+        $config->database = $this->loaded_files[$database_file] + $config->database;
 
         return $config;
     }

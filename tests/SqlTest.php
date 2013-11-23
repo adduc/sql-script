@@ -19,7 +19,7 @@ class SqlTest extends \PHPUnit_Framework_TestCase
     {
         $root = vfsStream::setup('root', null, array(
             'composer.json' => '{"extra": {"adduc-sql": {"database_file": "database.json"}}}',
-            'database.json' => '{"unique": "value"}'
+            'database.json' => '{"dsn": "sqlite::memory:"}'
         ));
 
         $dir = vfsStream::url('root');
