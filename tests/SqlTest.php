@@ -1,6 +1,7 @@
 <?php
 
 namespace Adduc\SqlScript;
+
 use org\bovigo\vfs\vfsStream;
 
 class SqlTest extends \PHPUnit_Framework_TestCase
@@ -13,10 +14,12 @@ class SqlTest extends \PHPUnit_Framework_TestCase
         $this->sql = new Sql();
     }
 
+
     public function testRun()
     {
         $root = vfsStream::setup('root', null, array(
-            'composer.json' => '{ "extra": { "adduc-sql": {} } }'
+            'composer.json' => '{"extra": {"adduc-sql": {"database_file": "database.json"}}}',
+            'database.json' => '{"unique": "value"}'
         ));
 
         $dir = vfsStream::url('root');

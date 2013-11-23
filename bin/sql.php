@@ -3,20 +3,23 @@
 
 namespace Adduc\SqlScript;
 
+/**
+ * Check that we're running via command line.
+ */
 if (php_sapi_name() != 'cli') {
     echo "This file can only be run via the command line.\n";
     exit(1);
 }
 
+/**
+ * Include composer for handling autoloading.
+ */
 include(__DIR__ . '/../vendor/autoload.php');
 
-// Find our configuration.
-$sql = new Sql();
-$config = $sql->getConfiguration(getcwd());
-
-if (!$config) {
-    fwrite(STDERR, "Could not find a composer.json file with extra->adduc-sql set.\n");
+try {
+    $sql = new Sql();
+    $sql->run(getcwd(), STDOUT);
+} catch (\Exception $e) {
+    fwrite(STDERR, "{$e->getMessage()}\n");
     exit(1);
 }
-
-var_dump($config);

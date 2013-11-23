@@ -2,43 +2,38 @@
 
 namespace Adduc\SqlScript;
 
+/**
+ * Very simple Configuration class.
+ */
 class Configuration
 {
-    public $data = array(
-        "database-json" => "config/database.json",
-        "sql-schema" => "sql/schema",
-        "sql-data" => "sql/data"
-    );
+
+    public $database_file = "config/database.json";
 
     /**
-     * Identify composer file with desired data, walking up directory tree
-     * until found.
      *
-     * @return array|false
      */
-    public function __construct($dir)
-    {
-        $dir = realpath($dir) ?: $dir;
+    public $sql_schema = "sql/schema";
 
-        while ($dir != dirname($dir)) {
-            $file = "{$dir}/composer.json";
+    /**
+     *
+     */
+    public $sql_data = "sql/data";
 
-            switch (false) {
-                case file_exists($file):
-                case is_readable($file):
-                case $file = file_get_contents($file):
-                case $json = json_decode($file, true):
-                case isset($json['extra']['adduc-sql']):
-                case is_array($json['extra']['adduc-sql']):
-                    break;
-                default:
-                    $this->data['dir'] = $dir;
-                    $this->data = $json['extra']['adduc-sql'] + $this->data;
-                    return;
-            }
-            $dir = dirname($dir);
+    /**
+     *
+     */
+    public $database = array(
+        "hostname" => "localhost",
+        "database" => "database",
+        "username" => "username",
+        "password" => "password"
+    );
+
+    public function __construct(array $data = array()) {
+        foreach ($data as $key => $value) {
+            $this->$key = $value;
         }
-        $msg = "Could not find composer configuration file with extra.adduc-sql";
-        throw new \DomainException($msg);
     }
+
 }
