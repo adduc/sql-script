@@ -15,6 +15,7 @@
         "ext-pdo": "*"
     },
     "require-dev": {
+        "ext-sqlite": "*",
         "phing/phing": "dev-master",
         "seld/jsonlint": "dev-master",
         "phpunit/phpunit": "@stable",
