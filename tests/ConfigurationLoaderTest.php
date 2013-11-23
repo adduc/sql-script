@@ -1,6 +1,7 @@
 <?php
 
 namespace Adduc\SqlScript;
+
 use org\bovigo\vfs\vfsStream;
 
 class ConfigurationLoaderTest extends \PHPUnit_Framework_TestCase
@@ -26,7 +27,7 @@ class ConfigurationLoaderTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException \DomainException
      */
-    public function testFindConfigurationFile_expectedFailure()
+    public function testFindConfigurationFileExpectedFailure()
     {
         $root = vfsStream::setup('root', null, array());
         $dir = vfsStream::url('root');
@@ -47,7 +48,7 @@ class ConfigurationLoaderTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException \InvalidArgumentException
      */
-    public function testLoadConfiguration_invalidFile()
+    public function testLoadConfigurationInvalidFile()
     {
         $root = vfsStream::setup('root', null, array());
         $file = vfsStream::url('root/composer.json');
@@ -57,7 +58,7 @@ class ConfigurationLoaderTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException \DomainException
      */
-    public function testLoadConfiguration_noDatabase()
+    public function testLoadConfigurationNoDatabase()
     {
         $root = vfsStream::setup('root', null, array(
             'composer.json' => '{ "extra": { "adduc-sql": {} } }'
@@ -65,5 +66,4 @@ class ConfigurationLoaderTest extends \PHPUnit_Framework_TestCase
         $file = vfsStream::url('root/composer.json');
         $config = $this->loader->loadConfiguration($file);
     }
-
 }
