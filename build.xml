@@ -2,9 +2,9 @@
 
 <project default="build">
 
-    <target name="build" depends="clean,prepare,phplint,jsonlint,phpunit" />
+    <target name="build" depends="clean,prepare,phplint,jsonlint,phpunit,codesniffer" />
 
-    <target name="quick" depends="phplint,jsonlint,phpunit" />
+    <target name="quick" depends="phplint,jsonlint,phpunit,codesniffer" />
 
     <target name="clean">
         <delete dir="build" />
@@ -52,6 +52,22 @@
                 </fileset>
             </batchtest>
         </phpunit>
+    </target>
+
+    <target name="codesniffer">
+        <phpcodesniffer
+            standard="PSR2"
+            showWarnings="true"
+            haltonerror="true"
+            haltonwarning="true"
+        >
+            <fileset dir=".">
+                <include name="bin/**/*.php" />
+                <include name="src/**/*.php" />
+                <include name="tests/**/*.php" />
+            </fileset>
+            <formatter type="default" usefile="false"/>
+        </phpcodesniffer>
     </target>
 
 </project>
