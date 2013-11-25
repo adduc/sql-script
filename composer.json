@@ -11,6 +11,7 @@
     "autoload": {
         "classmap": ["src/"]
     },
+    "bin": ["bin/sql.php"],
     "require": {
         "ext-pdo": "*"
     },
