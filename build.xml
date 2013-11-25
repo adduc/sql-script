@@ -45,6 +45,7 @@
             haltonfailure="true"
             bootstrap="vendor/autoload.php"
         >
+            <formatter type="summary" usefile="false"/>
             <formatter type="xml" usefile="true" todir="build" outfile="phpunit-junit.xml" />
             <batchtest>
                 <fileset dir="tests">
