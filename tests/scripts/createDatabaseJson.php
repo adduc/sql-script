@@ -29,7 +29,7 @@ try {
     $db_config->validateDatabaseConfig($data);
 
     $file = __DIR__ . '/../../database.json';
-    if(file_exists($file)) {
+    if (file_exists($file)) {
         throw new \Exception("File already exists. Will not overwrite.\n");
     }
 
