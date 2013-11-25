@@ -4,39 +4,50 @@ namespace Adduc\SqlScript;
 
 class Sql
 {
-    public function run($dir = false, $output = false)
+
+    public function run($dir, $command, $resource)
     {
-        /**
-         * * Load configuration.
-         * * Load database configuration.
-         * * Connect to Database.
-         */
+        $resource = is_resource($resource) ? $resource : false;
+        $dc_obj = new DatabaseConfig();
 
+        switch (false) {
+            case $dir = $this->identifySqlDir($dir):
+                $msg = "Could not find SQL directory.";
+                throw new \Exception($msg);
 
-        $output = is_resource($output) ? $output : false;
+            case $file = file_get_contents("{$dir}/database.json"):
+                $msg = "Could not read database configuration.";
+                throw new \Exception($msg);
 
-        $loader = new ConfigurationLoader();
-        $file = $loader->findConfigurationFile($dir ?: getcwd());
-        $config = $loader->loadConfiguration($file);
-        $output && fwrite($output, "Configuration loaded.\n");
+            case $db_config = json_decode($file, true):
+                $msg = "Could not decode db_config.";
+                throw new \Exception($msg);
 
-        $db = new \PDO(
-            $config->database['dsn'],
-            $config->database['username'],
-            $config->database['password']
-        );
-        $output && fwrite($output, "Connected to database.\n");
+            case $dc_obj->validateDatabaseConfig($db_config):
+                $msg = "Invalid database configuration.";
+                throw new \Exception($msg);
 
-        foreach (array('sql_schema', 'sql_data') as $key) {
+            case in_array($command, array('restore', 'save')):
+                $msg = "Unrecognized Command.";
+                throw new \InvalidArgumentException($msg);
+        }
 
-            $dir = dirname($file) . "/{$config->$key}";
-            file_exists($dir) || $dir = $config->$key;
-            $files = array_diff(scandir($dir), array('.', '..'));
+        $class = __NAMESPACE__ . "\\" . ucfirst($command);
+        $obj = new $class();
+        $obj->run($dir, $db_config, $resource);
+    }
 
-            foreach ($files as $sql) {
-                $output && fwrite($output, sprintf("Processing %s.\n", $sql));
-                $db->exec("SOURCE {$sql};");
-            }
+    public function identifySqlDir($dir)
+    {
+        switch (true) {
+            case !is_dir("{$dir}/sql"):
+            case !is_dir("{$dir}/sql/data"):
+            case !is_dir("{$dir}/sql/schema"):
+            case !is_file("{$dir}/sql/database.json"):
+                return dirname($dir) != $dir
+                    ? $this->identifySqlDir(dirname($dir)) : false;
+            default:
+                return "{$dir}/sql";
         }
     }
 }

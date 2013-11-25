@@ -3,22 +3,18 @@
 
 namespace Adduc\SqlScript;
 
-/**
- * Check that we're running via command line.
- */
-if (php_sapi_name() != 'cli') {
-    echo "This file can only be run via the command line.\n";
-    exit(1);
+if (php_sapi_name() != "cli") {
+    die("Must be run in command line mode.");
 }
 
-/**
- * Include composer for handling autoloading.
- */
 include(__DIR__ . '/../vendor/autoload.php');
 
 try {
     $sql = new Sql();
-    $sql->run(getcwd(), STDOUT);
+    $sql->run(getcwd(), end($argv), STDOUT);
+} catch (\InvalidArgumentException $e) {
+    fwrite(STDERR, "Usage: <script> [restore|save]\n");
+    exit(1);
 } catch (\Exception $e) {
     fwrite(STDERR, "{$e->getMessage()}\n");
     exit(1);
