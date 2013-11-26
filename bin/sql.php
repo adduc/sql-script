@@ -7,7 +7,12 @@ if (php_sapi_name() != "cli") {
     die("Must be run in command line mode.");
 }
 
-include(__DIR__ . '/../vendor/autoload.php');
+foreach(array('', '/../../../') as $prefix) {
+    $file = __DIR__ . "{$prefix}/../vendor/autoload.php";
+    if (file_exists($file)) {
+        include($file);
+    }
+}
 
 try {
     $sql = new Sql();
