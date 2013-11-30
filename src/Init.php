@@ -24,7 +24,7 @@ class Init
 
         $database_file = "{$dirs['sql']}/database.json";
 
-        if(!is_file($database_file)) {
+        if (!is_file($database_file)) {
             $msg = "Writing sample database config to {$database_file}\n";
             $stream && fwrite($stream, $msg);
             $data = array(
@@ -37,5 +37,4 @@ class Init
             file_put_contents($database_file, json_encode($data));
         }
     }
-
 }
