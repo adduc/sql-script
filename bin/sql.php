@@ -18,7 +18,7 @@ try {
     $sql = new Sql();
     $sql->run(getcwd(), end($argv), STDOUT);
 } catch (\InvalidArgumentException $e) {
-    fwrite(STDERR, "Usage: <script> [restore|save]\n");
+    fwrite(STDERR, "Usage: <script> [restore|save|init]\n");
     exit(1);
 } catch (\Exception $e) {
     fwrite(STDERR, "{$e->getMessage()}\n");

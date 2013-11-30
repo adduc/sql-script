@@ -11,6 +11,10 @@ class Sql
         $dc_obj = new DatabaseConfig();
 
         switch (false) {
+            case $command != 'init':
+                $db_config = array();
+                break;
+
             case $dir = $this->identifySqlDir($dir):
                 $msg = "Could not find SQL directory.";
                 throw new \Exception($msg);
