@@ -4,14 +4,16 @@ namespace Adduc\SqlScript;
 
 class Save
 {
-    public function run($sql_dir, array $config, $stream = false)
+    public function run($sql_dir, array $db_data, $stream = false)
     {
         $stream = is_resource($stream) ? $stream : false;
 
         $db_config = new DatabaseConfig();
-        $db_config->validateDatabaseConfig($data);
+        $db_config->validateDatabaseConfig($db_data);
 
-        $command = $this->buildCommand($sql_dir, $data);
+        $command = $this->buildCommand($sql_dir, $db_data);
+        $msg = "Writing schema to {$sql_dir} directory.\n";
+        $stream && fwrite($stream, $msg);
         exec($command);
     }
 
@@ -19,10 +21,10 @@ class Save
      * @param string $sql_dir
      * @param array $db_config
      */
-    public function buildCommand($sql_dir, array $data)
+    public function buildCommand($sql_dir, array $db_data)
     {
         $db_config = new DatabaseConfig();
-        $db_config->validateDatabaseConfig($data);
+        $db_config->validateDatabaseConfig($db_data);
 
         $mysqldump = exec("which mysqldump", $output, $return_var);
         if ($return_var !== 0) {
@@ -44,10 +46,10 @@ class Save
         $command = sprintf(
             $command,
             $mysqldump,
-            $data['username'],
-            $data['password'],
-            $data['hostname'],
-            $data['database']
+            $db_data['username'],
+            $db_data['password'],
+            $db_data['hostname'],
+            $db_data['database']
         );
 
         return $command;

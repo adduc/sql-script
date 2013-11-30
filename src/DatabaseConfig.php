@@ -8,15 +8,20 @@ class DatabaseConfig
     {
         switch(true) {
             case !is_array($db_config):
-                throw new \Exception("Configuration is not valid.");
+                $msg = "Database Config: Configuration is not valid.";
+                throw new \Exception($msg);
             case !isset($db_config['hostname']):
-                throw new \Exception("Hostname is not valid.");
+                $msg = "Database Config: Hostname is not valid.";
+                throw new \Exception($msg);
             case !isset($db_config['database']):
-                throw new \Exception("Database is not valid.");
+                $msg = "Database Config: Database is not valid.";
+                throw new \Exception($msg);
             case !isset($db_config['username']):
-                throw new \Exception("Username is not valid.");
+                $msg = "Database Config: Username is not valid.";
+                throw new \Exception($msg);
             case !isset($db_config['password']):
-                throw new \Exception("Password is not valid.");
+                $msg = "Database Config: Password is not valid.";
+                throw new \Exception($msg);
             default:
                 return true;
         }
