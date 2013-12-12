@@ -67,7 +67,7 @@
                 <include name="src/**/*.php" />
                 <include name="tests/**/*.php" />
             </fileset>
-            <formatter type="default" usefile="false"/>
+            <formatter type="full" usefile="false"/>
         </phpcodesniffer>
     </target>
 
