@@ -11,31 +11,42 @@ class Restore
         $dc_obj = new DatabaseConfig();
         $dc_obj->validateDatabaseConfig($config);
 
-        $file = "{$sql_dir}/schema/{$config['database']}.schema.sql";
+        // Ensure $config['database'] is an array
+        if (!is_array($config['database'])) {
+            $config['database'] = array($config['database']);
+        }
 
-        $command = $this->buildDropCommand($config);
-        $stream && fwrite($stream, "Deleting all tables in {$config['database']}\n");
-        exec($command);
 
-        $command = $this->buildCommand($config, $file);
-        $stream && fwrite($stream, "Processing {$file}\n");
-        exec($command);
+        foreach ($config['database'] as $database) {
+            $file = "{$sql_dir}/schema/{$config['database']}.schema.sql";
 
-        $dir = "{$sql_dir}/data";
-        foreach (array_diff(scandir($dir), array('.', '..')) as $file) {
-            $command = $this->buildCommand($file, $config);
-            $stream && fwrite($stream, "Processing {$command}\n");
+            $command = $this->buildDropCommand($database, $config);
+            $stream && fwrite($stream, "Deleting all tables in {$config['database']}\n");
             exec($command);
+
+            $command = $this->buildCommand($database, $config, $file);
+            $stream && fwrite($stream, "Processing {$file}\n");
+            exec($command);
+
+            $dir = "{$sql_dir}/data";
+            foreach (array_diff(scandir($dir), array('.', '..')) as $file) {
+                if (stripos(basename($file), $database) !== 0) {
+                    continue;
+                }
+                $command = $this->buildCommand($database, $config, $file);
+                $stream && fwrite($stream, "Processing {$command}\n");
+                exec($command);
+            }
         }
     }
 
-    public function buildDropCommand($config)
+    public function buildDropCommand($database, $config)
     {
         $mysql = $this->findCommand('mysql');
         $mysqldump = $this->findCommand('mysqldump');
 
         $command = sprintf(
-            '%1$s -u%3$s -p%4$s -h%5$s %6$s'
+            'MYSQL_PWD=%4$s %1$s -u%3$s -h%5$s %6$s'
             . ' | grep ^DROP'
             . ' | %2$s -u%3$s -p%4$s -h%5$s %6$s',
             $mysqldump,
@@ -43,24 +54,24 @@ class Restore
             $config['username'],
             $config['password'],
             $config['hostname'],
-            $config['database']
+            $database
         );
 
         return $command;
     }
 
-    public function buildCommand($config, $sql_file)
+    public function buildCommand($database, $config, $sql_file)
     {
         $mysql = $this->findCommand('mysql');
 
         $command = sprintf(
-            "%s -u%s -p%s -h%s %s < %s",
+            'MYSQL_PWD=%3$s %1$s -u%2$s -h%4$s %5$s < %6$s',
             $mysql,
             $config['username'],
             $config['password'],
             $config['hostname'],
             $config['database'],
-            $sql_file
+            $database
         );
 
         return $command;
