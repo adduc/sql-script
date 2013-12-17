@@ -43,6 +43,8 @@ class Save
         $command = 'MYSQL_PWD=%3$s %1$s -u%2$s -h%4$s %5$s --skip-dump-date -e -d -n';
         // Strip auto increment.
         $command .= " | sed 's/\\sAUTO_INCREMENT=[0-9]*\\b//'";
+        // String engine.
+        $command .= " | sed 's/\\sENGINE=[A-Za-z0-9_]*//'";
         // Strip definer.
         $command .= " | perl -p -e 's/\/\*(((?!\*\/).)*)DEFINER=(((?!\*\/).)*)\*\///g'";
         // Strip comments at beginning of line.
