@@ -11,6 +11,11 @@ class Save
         $db_config = new DatabaseConfig();
         $db_config->validateDatabaseConfig($db_data);
 
+        // Ensure $db_data['database'] is an array
+        if (!is_array($db_data['database'])) {
+            $db_data['database'] = array($db_data['database']);
+        }
+
         foreach ($db_data['database'] as $database) {
             $command = $this->buildCommand($database, $sql_dir, $db_data);
             $msg = "Writing schema to {$sql_dir} directory.\n";
