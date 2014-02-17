@@ -51,7 +51,7 @@ class Save
         // Strip comments at beginning of line.
         $command .= " | sed 's/^--.*$//g'";
         // Output to schema file.
-        $command .= " > {$sql_dir}/schema/%5\$s.schema.sql";
+        $command .= " > {$sql_dir}/schema/%6\$s.schema.sql";
 
         $command = sprintf(
             $command,
